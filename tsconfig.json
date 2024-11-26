@@ -11,6 +11,9 @@
       "@Pix/*": [
         "./modules/Transfer/Pix/*"
       ],
+      "@Loading/*": [
+        "./modules/Transfer/Loading/*"
+      ],
     }
   }
 }

@@ -13,6 +13,10 @@ module.exports = {
             rootPathSuffix: './src/modules/Transfer/Pix/',
             rootPathPrefix: '@Pix/',
           },
+          {
+            rootPathSuffix: './src/modules/Transfer/Loading/',
+            rootPathPrefix: '@Loading/',
+          },
         ],
       },
     ],
