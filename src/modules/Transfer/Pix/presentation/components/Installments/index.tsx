@@ -1,5 +1,7 @@
 import React from 'react';
 
+import LottieView from 'lottie-react-native';
+
 import { ChevronRight } from '~/assets/svg';
 import { FormatersUtil } from '~/utils';
 
@@ -10,6 +12,8 @@ export const Installments: React.FC<IInstallments> = ({
   simulator,
   currency,
   transferValue,
+  isLoading,
+  onPressInstallment,
 }) => {
   const getFormatedFee = (fee: number) => {
     if (fee > 0) return fee.toFixed(2).replace('.', ',');
@@ -17,9 +21,23 @@ export const Installments: React.FC<IInstallments> = ({
     return '-';
   };
 
+  if (isLoading)
+    return (
+      <LottieView
+        source={require('../../../../../../assets/animations/loading-bubles-circle.json')}
+        style={{
+          width: 100,
+          height: 60,
+          alignSelf: 'center',
+        }}
+        autoPlay
+        loop
+      />
+    );
+
   return (
     <S.Container>
-      <S.InstallmentsBlock>
+      <S.InstallmentsBlock onPress={onPressInstallment}>
         <S.Installments>
           {simulator
             ? `${simulator.installments}x de ${FormatersUtil.Currency(simulator.installmentAmount, currency)}`

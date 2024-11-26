@@ -4,4 +4,6 @@ export interface IInstallments {
   simulator?: InstallmentDTO;
   currency: string;
   transferValue: number;
+  isLoading: boolean;
+  onPressInstallment: () => void;
 }

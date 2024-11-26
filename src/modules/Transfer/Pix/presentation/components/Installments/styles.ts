@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   row-gap: 30px;
-  padding: 0px 16px;
+  padding: 20px 16px;
 `;
 
 export const InstallmentsBlock = styled.TouchableOpacity`
