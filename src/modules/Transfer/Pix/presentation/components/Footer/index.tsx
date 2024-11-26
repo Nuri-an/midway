@@ -5,13 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '../Button';
 
-import { IBottomSheet } from './model';
+import { IFooter } from './model';
 import * as S from './styles';
 
-export const BottomSheet: React.FC<IBottomSheet> = ({
-  value,
-  isSubmitEnabled,
-}) => {
+export const Footer: React.FC<IFooter> = ({ value, isSubmitEnabled }) => {
   const { bottom } = useSafeAreaInsets();
 
   return (

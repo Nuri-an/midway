@@ -1,4 +1,4 @@
-export interface IBottomSheet {
+export interface IFooter {
   value: string;
   isSubmitEnabled: boolean;
 }

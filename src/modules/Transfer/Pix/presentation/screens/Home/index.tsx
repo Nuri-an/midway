@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useGetCards, useGetPayment } from '@Pix/data';
 import { InstallmentDTO } from '@Pix/domain/entities';
 import {
-  BottomSheet,
+  Footer,
   Installments,
   RadioButton,
 } from '@Pix/presentation/components';
@@ -63,7 +63,7 @@ export const Pix: React.FC = () => {
           )}
         </S.Content>
       </S.Container>
-      <BottomSheet
+      <Footer
         isSubmitEnabled={false}
         value={FormatersUtil.Currency(2000, 'BRL')}
       />
