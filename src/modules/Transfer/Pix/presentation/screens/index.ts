@@ -1,0 +1,1 @@
+export { Pix } from './Home';
