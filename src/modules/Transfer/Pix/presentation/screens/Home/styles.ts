@@ -61,5 +61,5 @@ export const CardsList = styled.View`
 `;
 
 export const CardBlock = styled.View`
-  row-gap: 30px;
+  row-gap: 10px;
 `;

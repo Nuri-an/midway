@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { useGetCards, useGetPayment } from '@Pix/data';
 import { InstallmentDTO } from '@Pix/domain/entities';
 import {
+  BottomSheet,
   Footer,
   Installments,
-  RadioButton,
+  PaymentMethod,
 } from '@Pix/presentation/components';
 
 import { FormatersUtil } from '~/utils';
@@ -15,11 +16,19 @@ import * as S from './styles';
 
 export const Pix: React.FC = () => {
   const { data: cards } = useGetCards();
-  const { data: payment } = useGetPayment();
+  const { data: payment, isPending, mutateAsync } = useGetPayment();
 
   const [paymentMethod, setPaymentMethod] =
     useState<PaymentMethodType>('account');
   const [simulator, setSimulator] = useState<InstallmentDTO>();
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
+
+  const selectPaymentMethod = async (method: string) => {
+    setPaymentMethod(method);
+    setSimulator(undefined);
+
+    await mutateAsync({});
+  };
 
   return (
     <S.Wrapper>
@@ -29,11 +38,11 @@ export const Pix: React.FC = () => {
           <S.Description>Escolha uma forma de pagamento</S.Description>
 
           <S.PaymentMethod>Conta Midway</S.PaymentMethod>
-          <RadioButton
+          <PaymentMethod
             title="Saldo em conta"
             description={`Disponível: ${FormatersUtil.Currency(2000, 'BRL')}`}
             isSelected={paymentMethod === 'account'}
-            onChangeSelected={() => setPaymentMethod('account')}
+            onChangeSelected={() => selectPaymentMethod('account')}
           />
 
           {cards !== undefined && (
@@ -42,18 +51,20 @@ export const Pix: React.FC = () => {
               <S.CardsList>
                 {cards?.map(card => (
                   <S.CardBlock key={card.brand}>
-                    <RadioButton
+                    <PaymentMethod
                       title={`Cartão ${card.brand}`}
                       description={`Final ${card.cardNumber}`}
                       isSelected={paymentMethod === card.brand}
-                      onChangeSelected={() => setPaymentMethod(card.brand)}
+                      onChangeSelected={() => selectPaymentMethod(card.brand)}
                       titleIcon={FormatersUtil.CardFlag(card.brand)}
                     />
                     {paymentMethod === card.brand && (
                       <Installments
+                        isLoading={isPending}
                         currency={payment?.currency!}
                         transferValue={payment?.amount!}
                         simulator={simulator}
+                        onPressInstallment={() => setShowBottomSheet(true)}
                       />
                     )}
                   </S.CardBlock>
@@ -64,9 +75,27 @@ export const Pix: React.FC = () => {
         </S.Content>
       </S.Container>
       <Footer
-        isSubmitEnabled={false}
-        value={FormatersUtil.Currency(2000, 'BRL')}
+        isSubmitEnabled={paymentMethod === 'account' || !!simulator}
+        buttonLabel="Pagar"
+        value={
+          paymentMethod === 'account' && payment
+            ? FormatersUtil.Currency(payment.amount, payment.currency)
+            : simulator && payment
+              ? `${simulator.installments}x de ${FormatersUtil.Currency(simulator.installmentAmount, payment?.currency)}`
+              : '-'
+        }
+        onSubmit={() => {}}
       />
+      {!!payment && (
+        <BottomSheet
+          installmentSelected={simulator}
+          installments={payment.simulation}
+          currency={payment.currency!}
+          onPress={setSimulator}
+          onClose={() => setShowBottomSheet(false)}
+          isVisible={showBottomSheet}
+        />
+      )}
     </S.Wrapper>
   );
 };

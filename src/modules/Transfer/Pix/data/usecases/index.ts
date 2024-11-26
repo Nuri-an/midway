@@ -27,6 +27,7 @@ export class PixDataUseCase implements PixDataUseCaseInterface {
     // const response = await pixData.getInstallments();
 
     // return response;
+    await new Promise(resolve => setTimeout(resolve, 2000));
     return FAKER.PAYMENT;
   }
 }
