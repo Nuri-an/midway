@@ -22,9 +22,10 @@ export class PixDataUseCase implements PixDataUseCaseInterface {
     return FAKER.CARDS;
   }
 
-  public async fetchInstallments(): Promise<PaymentDTO> {
+  public async fetchInstallments(method: string): Promise<PaymentDTO> {
     const pixData = new PixData();
-    // const response = await pixData.getInstallments();
+    const methodFormated = method.split(' ').join('-');
+    // const response = await pixData.getInstallments(methodFormated);
 
     // return response;
     await new Promise(resolve => setTimeout(resolve, 2000));

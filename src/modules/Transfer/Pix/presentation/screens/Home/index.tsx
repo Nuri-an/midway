@@ -8,26 +8,28 @@ import {
   Installments,
   PaymentMethod,
 } from '@Pix/presentation/components';
+import { StackScreenProps } from '@react-navigation/stack';
 
+import { ITransferParamList } from '~/types';
 import { FormatersUtil } from '~/utils';
 
 import { PaymentMethodType } from './model';
 import * as S from './styles';
 
-export const Pix: React.FC = () => {
-  const { data: cards } = useGetCards();
-  const { data: payment, isPending, mutateAsync } = useGetPayment();
+type PixScreenProps = StackScreenProps<ITransferParamList, 'Pix'>;
 
+export const Pix: React.FC<PixScreenProps> = ({ navigation }) => {
   const [paymentMethod, setPaymentMethod] =
     useState<PaymentMethodType>('account');
   const [simulator, setSimulator] = useState<InstallmentDTO>();
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
+  const { data: cards } = useGetCards();
+  const { data: payment, isPending } = useGetPayment(paymentMethod);
+
   const selectPaymentMethod = async (method: string) => {
     setPaymentMethod(method);
     setSimulator(undefined);
-
-    await mutateAsync({});
   };
 
   return (
@@ -75,7 +77,9 @@ export const Pix: React.FC = () => {
         </S.Content>
       </S.Container>
       <Footer
-        isSubmitEnabled={paymentMethod === 'account' || !!simulator}
+        isSubmitEnabled={
+          (paymentMethod === 'account' || !!simulator) && !!payment
+        }
         buttonLabel="Pagar"
         value={
           paymentMethod === 'account' && payment
@@ -84,7 +88,7 @@ export const Pix: React.FC = () => {
               ? `${simulator.installments}x de ${FormatersUtil.Currency(simulator.installmentAmount, payment?.currency)}`
               : '-'
         }
-        onSubmit={() => {}}
+        onSubmit={() => navigation.navigate('Loading')}
       />
       {!!payment && (
         <BottomSheet

@@ -10,8 +10,10 @@ export class PixData implements PixDataInterface {
     return response;
   }
 
-  public async getInstallments(): Promise<PaymentDTO> {
-    const response = await axios.get<any, PaymentDTO>('/payment/installments');
+  public async getInstallments(method: string): Promise<PaymentDTO> {
+    const response = await axios.get<any, PaymentDTO>(
+      `/payment/${method}/installments/`,
+    );
 
     return response;
   }
