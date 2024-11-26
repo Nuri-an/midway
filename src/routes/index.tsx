@@ -4,6 +4,7 @@ import { Pix } from '@Pix/presentation';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { ChevronLeft } from '~/assets/svg';
+import { ButtonShadow } from '~/components';
 
 import * as S from './styles';
 
@@ -13,9 +14,9 @@ const Routes = (): ReactElement => {
   const Header = useMemo(
     () => (
       <S.Container>
-        <S.ContainerHeaderLeft>
+        <ButtonShadow>
           <ChevronLeft />
-        </S.ContainerHeaderLeft>
+        </ButtonShadow>
       </S.Container>
     ),
     [],
