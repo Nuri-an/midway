@@ -20,22 +20,6 @@ export const Container = styled.TouchableOpacity`
       `}
 `;
 
-export const ContentDot = styled.View`
-  width: 24px;
-  height: 24px;
-  border-radius: 200px;
-  border-width: 1px;
-  padding: 3px;
-  border-color: ${({ theme }) => theme.colors.primary};
-`;
-
-export const Dot = styled.View`
-  width: 100%;
-  height: 100%;
-  border-radius: 200px;
-  background-color: ${({ theme }) => theme.colors.primary};
-`;
-
 export const Content = styled.View`
   row-gap: 8px;
 `;

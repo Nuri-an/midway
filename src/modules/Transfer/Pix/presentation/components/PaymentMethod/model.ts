@@ -1,4 +1,4 @@
-export interface IRadioButton {
+export interface IPaymentMethod {
   onChangeSelected: () => void;
   isSelected: boolean;
   title: string;

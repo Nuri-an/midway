@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { IRadioButton } from './model';
+import { RadioButton } from '~/components';
+
+import { IPaymentMethod } from './model';
 import * as S from './styles';
 
-export const RadioButton: React.FC<IRadioButton> = ({
+export const PaymentMethod: React.FC<IPaymentMethod> = ({
   onChangeSelected,
   isSelected,
   titleIcon,
@@ -16,7 +18,7 @@ export const RadioButton: React.FC<IRadioButton> = ({
       disabled={isSelected}
       activeOpacity={0.9}
     >
-      <S.ContentDot>{isSelected && <S.Dot />}</S.ContentDot>
+      <RadioButton isSelected={isSelected} onPress={() => {}} />
       <S.Content>
         <S.ContentTitle>
           {titleIcon !== undefined && <S.Icon uri={titleIcon} />}
