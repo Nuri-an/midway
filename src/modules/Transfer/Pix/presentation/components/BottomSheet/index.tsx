@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Animated, Dimensions, View } from 'react-native';
+import { Animated, Dimensions, Modal, Platform, StatusBar } from 'react-native';
 import {
   GestureEvent,
   GestureHandlerRootView,
@@ -20,7 +20,8 @@ import { Footer } from '../Footer';
 import { IBottomSheet } from './model';
 import * as S from './styles';
 
-const { width } = Dimensions.get('screen');
+const { height } = Dimensions.get('screen');
+const modalHeight = height * 0.83;
 
 export const BottomSheet: React.FC<IBottomSheet> = ({
   isVisible,
@@ -32,8 +33,13 @@ export const BottomSheet: React.FC<IBottomSheet> = ({
 }) => {
   const { top } = useSafeAreaInsets();
   const topInsets = top + 20;
+  const statusBarHeight = StatusBar.currentHeight || 0;
 
-  const [animatedView] = useState(new Animated.Value(top));
+  const [animatedView] = useState(
+    new Animated.Value(
+      Platform.OS === 'ios' ? top : topInsets + statusBarHeight,
+    ),
+  );
   const [installment, setInstallment] = useState<InstallmentDTO | undefined>(
     installmentSelected,
   );
@@ -54,8 +60,8 @@ export const BottomSheet: React.FC<IBottomSheet> = ({
 
   const animateClose = (): void => {
     Animated.timing(animatedView, {
-      toValue: 500,
-      duration: 900,
+      toValue: height,
+      duration: 500,
       useNativeDriver: true,
     }).start(({ finished }) => {
       if (finished) {
@@ -68,12 +74,12 @@ export const BottomSheet: React.FC<IBottomSheet> = ({
     evt: GestureEvent<PanGestureHandlerEventPayload>,
   ): void => {
     const { nativeEvent } = evt;
-    const offset = 30;
+    const offset = 100;
 
-    if (nativeEvent.absoluteY > topInsets)
+    if (nativeEvent.absoluteY > height - modalHeight + statusBarHeight)
       animatedView.setValue(nativeEvent.absoluteY - offset);
 
-    if (nativeEvent.absoluteY > width / 2) animateClose();
+    if (nativeEvent.absoluteY > height / 2) animateClose();
   };
 
   const resetState = () => {
@@ -86,56 +92,60 @@ export const BottomSheet: React.FC<IBottomSheet> = ({
   }, [isVisible]);
 
   return (
-    <S.Wrapper visible={isVisible} transparent>
+    <Modal visible={isVisible} statusBarTranslucent transparent>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <S.Container topInsets={topInsets}>
-          <PanGestureHandler onGestureEvent={handleGesture}>
-            <S.Content
-              style={{
-                transform: [{ translateY: animatedView }],
-              }}
-            >
-              <View>
-                <S.Swipper />
-                <S.Header>
-                  <S.TitleBlock>
-                    <S.Title>Parcelas do pagamento</S.Title>
-                    <ButtonShadow onPress={onClose}>
-                      <Close />
-                    </ButtonShadow>
-                  </S.TitleBlock>
-                  <S.Description>
-                    O destinatário receberá à vista e você pagará parcelado.
-                  </S.Description>
-                </S.Header>
-                <S.InstallmentsList>
-                  {installments.map(item => (
-                    <RadioButton
-                      isSelected={item === installment}
-                      onPress={() => setInstallment(item)}
-                      key={item.installments}
-                    >
-                      <S.Installment>
-                        {item.installments}x de{' '}
-                        {FormatersUtil.Currency(
-                          item.installmentAmount,
-                          currency,
-                        )}
-                      </S.Installment>
-                    </RadioButton>
-                  ))}
-                </S.InstallmentsList>
-              </View>
+        <S.Wrapper topInsets={topInsets}>
+          <S.Container
+            height={modalHeight}
+            style={{
+              transform: [{ translateY: animatedView }],
+            }}
+            onStartShouldSetResponder={() => true}
+            onTouchEnd={e => {
+              e.stopPropagation();
+            }}
+          >
+            <S.Content>
+              <PanGestureHandler onGestureEvent={handleGesture}>
+                <S.SwipperContainer>
+                  <S.Swipper />
+                </S.SwipperContainer>
+              </PanGestureHandler>
+              <S.Header>
+                <S.TitleBlock>
+                  <S.Title>Parcelas do pagamento</S.Title>
+                  <ButtonShadow onPress={onClose}>
+                    <Close />
+                  </ButtonShadow>
+                </S.TitleBlock>
+                <S.Description>
+                  O destinatário receberá à vista e você pagará parcelado.
+                </S.Description>
+              </S.Header>
+              <S.InstallmentsList>
+                {installments.map(item => (
+                  <RadioButton
+                    isSelected={item === installment}
+                    onPress={() => setInstallment(item)}
+                    key={item.installments}
+                  >
+                    <S.Installment>
+                      {item.installments}x de{' '}
+                      {FormatersUtil.Currency(item.installmentAmount, currency)}
+                    </S.Installment>
+                  </RadioButton>
+                ))}
+              </S.InstallmentsList>
             </S.Content>
-          </PanGestureHandler>
-        </S.Container>
-        <Footer
-          isSubmitEnabled={!!installment}
-          buttonLabel="Continuar"
-          value={getFormatedValue()}
-          onSubmit={onSubmit}
-        />
+            <Footer
+              isSubmitEnabled={!!installment}
+              buttonLabel="Continuar"
+              value={getFormatedValue()}
+              onSubmit={onSubmit}
+            />
+          </S.Container>
+        </S.Wrapper>
       </GestureHandlerRootView>
-    </S.Wrapper>
+    </Modal>
   );
 };

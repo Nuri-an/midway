@@ -9,6 +9,10 @@ export interface IBottomSheet {
   onPress: (installment: InstallmentDTO) => void;
 }
 
-export interface IContainer {
+export interface IWrapper {
   topInsets: number;
+}
+
+export interface IContainer {
+  height: number;
 }

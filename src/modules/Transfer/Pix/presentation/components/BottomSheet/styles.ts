@@ -1,22 +1,30 @@
-import { Animated, StatusBar } from 'react-native';
+import { Animated } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
-import { IContainer } from './model';
+import { IContainer, IWrapper } from './model';
 
-export const Wrapper = styled.Modal``;
-
-export const Container = styled.View<IContainer>`
-  padding-top: ${({ topInsets }) =>
-    (StatusBar.currentHeight || 0) + topInsets + 20}px;
+export const Wrapper = styled.View<IWrapper>`
+  padding-top: ${({ topInsets }) => topInsets}px;
   flex: 1;
   background-color: ${({ theme }) => theme.colors.darkGray}cc;
 `;
 
-export const Content = styled(Animated.View)`
-  padding: 12px 24px;
+export const Container = styled(Animated.View)<IContainer>`
   background-color: ${({ theme }) => theme.colors.white};
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
+  height: ${({ height }) => height}px;
+  justify-content: space-between;
+`;
+
+export const Content = styled.View`
+  padding: 12px 24px;
+`;
+
+export const SwipperContainer = styled.View`
+  width: 100%;
+  padding-bottom: 20px;
 `;
 
 export const Swipper = styled.View`
@@ -28,7 +36,7 @@ export const Swipper = styled.View`
 `;
 
 export const Header = styled.View`
-  padding: 20px 0px;
+  padding-bottom: 20px;
   row-gap: 8px;
 `;
 
@@ -52,13 +60,15 @@ export const Description = styled.Text`
   line-height: 18px;
 `;
 
-export const InstallmentsList = styled.ScrollView.attrs({
-  showsHorizontalScrollIndicator: false,
+export const InstallmentsList = styled(ScrollView).attrs({
+  showsVerticalScrollIndicator: false,
   contentContainerStyle: {
     rowGap: 30,
     paddingVertical: 30,
   },
-})``;
+})`
+  height: 75%;
+`;
 
 export const Installment = styled.Text`
   color: ${({ theme }) => theme.colors.primary};

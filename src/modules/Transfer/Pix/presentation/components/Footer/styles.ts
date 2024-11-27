@@ -13,7 +13,7 @@ export const Container = styled.View<IContainer>`
 
   ${Platform.OS === 'android'
     ? css`
-        elevation: 20px;
+        elevation: 6px;
       `
     : css`
         box-shadow: 0px -1px 4px ${({ theme }) => theme.colors.darkGray}1f;
