@@ -17,6 +17,10 @@ module.exports = {
             rootPathSuffix: './src/modules/Transfer/Loading/',
             rootPathPrefix: '@Loading/',
           },
+          {
+            rootPathSuffix: './src/modules/Transfer/Successful/',
+            rootPathPrefix: '@Successful/',
+          },
         ],
       },
     ],
