@@ -11,9 +11,12 @@ export class LoadingDataUseCase implements LoadingDataUseCaseInterface {
     return this.instance;
   }
 
-  public async createPayment(): Promise<void> {
+  public async createPayment(
+    method: string,
+    installments: number,
+  ): Promise<void> {
     const pixData = new LoadingData();
-    // await pixData.postPayment();
+    // await pixData.postPayment(method, installments);
 
     await new Promise(resolve => setTimeout(resolve, 3000));
   }

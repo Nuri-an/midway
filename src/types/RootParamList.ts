@@ -2,7 +2,10 @@ import { ParamListBase } from '@react-navigation/native';
 
 export interface ITransferRootStack {
   Pix: undefined;
-  Loading: undefined;
+  Loading: {
+    method: string;
+    installments: number;
+  };
   Successful: undefined;
 }
 

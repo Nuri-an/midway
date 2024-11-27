@@ -88,7 +88,12 @@ export const Pix: React.FC<PixScreenProps> = ({ navigation }) => {
               ? `${simulator.installments}x de ${FormatersUtil.Currency(simulator.installmentAmount, payment?.currency)}`
               : '-'
         }
-        onSubmit={() => navigation.navigate('Loading')}
+        onSubmit={() =>
+          navigation.navigate('Loading', {
+            method: paymentMethod,
+            installmnets: simulator?.installments ?? 0,
+          })
+        }
       />
       {!!payment && (
         <BottomSheet

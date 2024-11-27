@@ -1,7 +1,5 @@
 import styled from 'styled-components/native';
 
-export const Wrapper = styled.Modal``;
-
 export const Container = styled.View`
   flex: 1;
   align-items: center;
@@ -16,4 +14,5 @@ export const Text = styled.Text`
   font-size: 24px;
   line-height: 28px;
   text-align: center;
+  width: 80%;
 `;

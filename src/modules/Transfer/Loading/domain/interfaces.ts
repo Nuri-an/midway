@@ -1,7 +1,7 @@
 export interface LoadingDataInterface {
-  postPayment: () => Promise<void>;
+  postPayment: (method: string, installments: number) => Promise<void>;
 }
 
 export interface LoadingDataUseCaseInterface {
-  createPayment: () => Promise<void>;
+  createPayment: (method: string, installments: number) => Promise<void>;
 }
